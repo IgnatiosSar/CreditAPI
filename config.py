@@ -14,5 +14,10 @@ CONFIG = {
     # Training
     "batch_size": 32,
     "learning_rate": 0.001,
-    "epochs": 100
+    "epochs": 100,
+
+    # XGBoost
+    "xgb_n_estimators": 100,
+    "xgb_max_depth": 4,
+    "xgb_learning_rate": 0.1
 }

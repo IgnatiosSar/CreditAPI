@@ -1,7 +1,6 @@
 import pandas as pd
 import kagglehub
 from kagglehub import KaggleDatasetAdapter
-from sklearn.preprocessing import StandardScaler
 
 def load_data():
     '''
@@ -22,7 +21,7 @@ def preprocess_data(df):
     '''
     Process the German Credit dataset.
     '''
-    # Drop the 'Unnamed: 0' column
+    # Drop the 'Unnamed: 0' index column
     df = df.drop(columns=['Unnamed: 0'])
     
     categorical_columns = ['Sex', 'Housing', 'Purpose']
@@ -40,12 +39,6 @@ def preprocess_data(df):
     # Map the 'Risk' column to numerical values (binary)    
     risk_mapper = { 'good': 0, 'bad': 1 }
     df['Risk'] = df['Risk'].map(risk_mapper)
-
-    numerical_columns = ['Age', 'Credit amount', 'Duration']
-
-    # Standardize numerical columns
-    scaler = StandardScaler()
-    df[numerical_columns] = scaler.fit_transform(df[numerical_columns])
 
     return df
 
