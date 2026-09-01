@@ -31,11 +31,11 @@ def main():
         return
 
     y_pred = model.predict(X_test)
-    y_prob = model.predict_proba(X_test)[:, 1]  # Probability of the positive class
+    y_prob = model.predict_proba(X_test)[:, 1]  # Probability of the bad class (1) for ROC-AUC calculation
     
-    print("\n" + "="*40)
-    print("        XGBoost Evaluation Results")
-    print("="*40)
+    print("XGBoost Evaluation Results")
+
+    print(model.classes_)
     
     print(classification_report(Y_test, y_pred, target_names=["good", "bad"]))
     print("Confusion matrix:\n", confusion_matrix(Y_test, y_pred))

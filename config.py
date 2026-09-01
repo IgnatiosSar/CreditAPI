@@ -19,5 +19,8 @@ CONFIG = {
     # XGBoost
     "xgb_n_estimators": 100,
     "xgb_max_depth": 4,
-    "xgb_learning_rate": 0.1
+    "xgb_learning_rate": 0.1,
+
+    # Business Logic
+    "approval_threshold": 0.5
 }
