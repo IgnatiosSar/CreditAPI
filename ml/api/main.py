@@ -5,12 +5,18 @@ import pandas as pd
 import xgboost as xgb
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
+from pathlib import Path
+
+
+
+
 from config import CONFIG
 
 app = FastAPI()
 
 # Load the trained XGBoost model
-model_path = "saved_model/xgboost_model.json"
+ml_dir = Path(__file__).resolve().parent.parent
+model_path = ml_dir / "saved_model" / "xgboost_model.json"
 model = xgb.XGBClassifier()
 model.load_model(model_path)
 
@@ -20,7 +26,7 @@ savings_mapper = { 'little': 1, 'moderate': 2, 'quite rich': 3, 'rich': 4 }
 checking_mapper = { 'little': 1, 'moderate': 2, 'rich': 3 }
 categorical_columns = ['Sex', 'Housing', 'Purpose']
 
-with open("saved_model/feature_columns.json") as f:
+with open(ml_dir / "saved_model" / "feature_columns.json") as f:
     feature_columns = json.load(f)  # Same columns used to train both NN and XGBoost
 
 

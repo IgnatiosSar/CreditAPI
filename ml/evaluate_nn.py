@@ -1,14 +1,13 @@
 
-import os
 
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
 import torch
-
-from data.data_loader import get_processed_data
+from pathlib import Path
+from ml.data.data_loader import get_processed_data
 from config import CONFIG
-from model.model import CreditRiskModel
+from ml.model.model import CreditRiskModel
 
 torch.manual_seed(CONFIG["seed"])
 
@@ -25,7 +24,8 @@ def main():
         X, Y, test_size=CONFIG["test_size"], random_state=CONFIG["seed"]
     )
 
-    scaler_path = os.path.join("saved_model", "scaler.joblib")
+    ml_dir = Path(__file__).resolve().parent
+    scaler_path = ml_dir / "saved_model" / "scaler.joblib"
     try:
         scaler = joblib.load(scaler_path)
     except FileNotFoundError:
@@ -37,7 +37,7 @@ def main():
     X_test_t = torch.tensor(X_test, dtype=torch.float32)
     Y_test_t = torch.tensor(Y_test, dtype=torch.float32).unsqueeze(1)
 
-    model_path = os.path.join("saved_model", "credit_risk_model.pt")
+    model_path = ml_dir / "saved_model" / "credit_risk_model.pt"
 
     try:
         hidden_layers = CONFIG["hidden_layers"]

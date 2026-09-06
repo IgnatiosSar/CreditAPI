@@ -2,11 +2,13 @@
 import os
 from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
 import xgboost as xgb
+from pathlib import Path
 
 from sklearn.model_selection import train_test_split
 
+
 from config import CONFIG
-from data.data_loader import get_processed_data
+from ml.data.data_loader import get_processed_data
 
 
 def main():
@@ -21,7 +23,8 @@ def main():
         X, y, test_size=CONFIG["test_size"], random_state=CONFIG["seed"]
     )
 
-    model_path = os.path.join("saved_model", "xgboost_model.json")
+    ml_dir = Path(__file__).resolve().parent
+    model_path = ml_dir / "saved_model" / "xgboost_model.json"
     
     try:
         model = xgb.XGBClassifier()

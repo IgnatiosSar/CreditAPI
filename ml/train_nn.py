@@ -1,14 +1,13 @@
 import json
-
 import joblib
 import torch
-import os
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from data.data_loader import get_processed_data
-from model.model import CreditRiskModel
+from ml.data.data_loader import get_processed_data
+from ml.model.model import CreditRiskModel
 from torch.utils.data import TensorDataset, DataLoader
-from trainer.trainer import CreditRiskTrainer
+from ml.trainer.trainer import CreditRiskTrainer
+from pathlib import Path
 from config import CONFIG
 
 
@@ -18,9 +17,13 @@ def main():
     '''
     Main function to train the credit risk model.
     '''
+    ml_dir = Path(__file__).resolve().parent
+    save_dir = ml_dir / "saved_model"
+    save_dir.mkdir(parents=True, exist_ok=True)
+    
     df = get_processed_data()
     feature_columns = df.drop(columns=["Risk"]).columns.tolist()
-    with open("saved_model/feature_columns.json", "w") as f:
+    with open(save_dir / "feature_columns.json", "w") as f:
         json.dump(feature_columns, f)
 
     X = df.drop(columns=[CONFIG["target_column"]]).values
@@ -49,9 +52,8 @@ def main():
     trainer = CreditRiskTrainer(model, optimizer, loss_fn)
     trainer.train(train_loader, num_epochs=CONFIG["epochs"])
 
-    save_dir = "saved_model"
-    joblib.dump(scaler, os.path.join(save_dir, "scaler.joblib"))
-    file_path = os.path.join(save_dir, "credit_risk_model.pt")
+    joblib.dump(scaler,save_dir / "scaler.joblib")
+    file_path = save_dir / "credit_risk_model.pt"
     
     torch.save(model.state_dict(), file_path)
 

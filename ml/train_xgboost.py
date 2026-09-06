@@ -1,11 +1,15 @@
 
-import os
+
 
 from sklearn.model_selection import train_test_split
 import xgboost as xgb
 
 from config import CONFIG
-from data.data_loader import get_processed_data
+from ml.data.data_loader import get_processed_data
+from pathlib import Path
+
+
+
 
 def main():
     '''
@@ -33,10 +37,10 @@ def main():
 
     model.fit(X_train, y_train)
 
-    save_dir = "saved_model"
-    os.makedirs(save_dir, exist_ok=True)
-    
-    model_path = os.path.join(save_dir, "xgboost_model.json")
+    ml_dir = Path(__file__).resolve().parent
+    save_dir = ml_dir / "saved_model"
+    save_dir.mkdir(parents=True, exist_ok=True)     
+    model_path = save_dir / "xgboost_model.json"    
     model.save_model(model_path)
 
 
