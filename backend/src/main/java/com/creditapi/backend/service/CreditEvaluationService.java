@@ -45,4 +45,7 @@ public class CreditEvaluationService {
             throw new RuntimeException("Inference service unreachable", ex);
         }
     }
+
+
+    
 }
